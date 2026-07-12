@@ -1,0 +1,137 @@
+<!doctype html><html lang="en" data-theme="crescent-dark"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>.jos — the deterministic AI engineering standard</title>
+<meta name="description" content="jos.mx — home of the .jos open standard. Compiled, signed, immutable AI execution contracts. Buy determinism, not tokens. Built by FOXTANA.">
+<style>
+:root{--bg:#0a0a0f;--panel:#12131c;--panel2:#171826;--line:#23253a;--text:#e8e9f3;--muted:#9aa0c0;--accent:#7c4dff;--accent2:#e040fb;--ok:#37d99a;--warn:#f5b544;--bad:#ff5c7a;--ease:cubic-bezier(.4,0,.2,1)}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:radial-gradient(1200px 700px at 80% -10%,#1a1330,var(--bg) 55%) fixed;color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;min-height:100vh}
+canvas#aura{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
+header,main,footer{position:relative;z-index:1}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 32px;border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.brand{font-weight:800;letter-spacing:-.5px;font-size:20px}.brand .d{color:var(--accent2)}
+.brand small{color:var(--muted);font-weight:500;font-size:12px;border:1px solid var(--line);padding:2px 8px;border-radius:20px;margin-left:8px}
+nav a{color:var(--muted);text-decoration:none;margin-left:22px;font-size:14px}nav a:hover{color:var(--text)}
+.hero{max-width:1000px;margin:0 auto;padding:80px 32px 30px;text-align:center}
+.kicker{display:inline-block;font-size:12px;letter-spacing:2px;color:var(--accent2);border:1px solid var(--line);border-radius:20px;padding:6px 14px;margin-bottom:22px}
+h1{font-size:clamp(52px,10vw,120px);line-height:.9;letter-spacing:-4px;margin:0}
+h1 .d{background:linear-gradient(120deg,#fff,var(--accent2) 60%,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{font-size:clamp(19px,2.5vw,26px);margin:20px auto 6px;max-width:760px}
+.sub{color:var(--muted);max-width:660px;margin:0 auto 26px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:12px;padding:13px 22px;font-weight:700;font-size:15px;text-decoration:none;cursor:pointer;transition:transform .3s var(--ease)}
+.btn:hover{transform:translateY(-3px)}.btn.ghost{background:var(--panel);border:1px solid var(--line)}
+section{max-width:1000px;margin:0 auto;padding:44px 32px}
+h2{font-size:32px;letter-spacing:-1px;margin:0 0 6px}.lead{color:var(--muted);margin:0 0 26px}
+.commod{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.commod div{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+.commod h3{margin:0 0 8px;font-size:15px}.commod .x{color:var(--muted)}.commod .y{color:var(--ok);font-weight:600}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:ui-monospace,monospace;font-size:13px}
+.flow span{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 12px}
+.flow .arw{color:var(--accent2);border:none;background:none;padding:0 2px}
+.flow .seal{color:var(--ok);border-color:rgba(55,217,154,.4)}
+.stats{display:flex;gap:16px;justify-content:center;margin:18px 0 4px;flex-wrap:wrap}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 22px;text-align:center}
+.stat b{font-size:28px;display:block}.stat span{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.reg{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.rc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.rc-h{font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.rc-k{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);border:1px solid var(--line);border-radius:8px;padding:1px 6px}
+.rc-id{font-family:ui-monospace,monospace;font-size:12px;color:var(--muted);margin-top:8px}.rc-id b{color:var(--text)}
+.rc-sha{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.rc-t{font-size:11px;color:var(--muted);margin-top:6px}.dim{color:var(--muted)}
+.pg{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pg-h{padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px}
+.pg-b{display:grid;grid-template-columns:1fr 1fr}
+textarea{width:100%;height:300px;background:#0c0d15;color:#dfe3ff;border:none;border-right:1px solid var(--line);padding:14px;font-family:ui-monospace,monospace;font-size:12px;resize:vertical;outline:none}
+.res{padding:14px;height:300px;overflow:auto;font-family:ui-monospace,monospace;font-size:12px}
+.verdict{font-weight:800;padding:7px 11px;border-radius:10px;display:inline-block;margin-bottom:10px}
+.verdict.pass{color:var(--ok);border:1px solid rgba(55,217,154,.4)}.verdict.warn{color:var(--warn);border:1px solid rgba(245,181,68,.4)}.verdict.fail{color:var(--bad);border:1px solid rgba(255,92,122,.4)}
+.chk{margin:4px 0}.pg-f{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.integ{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:30px 32px;text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+@media(max-width:820px){.commod,.pg-b{grid-template-columns:1fr}textarea{border-right:none;border-bottom:1px solid var(--line)}}
+</style></head><body>
+<canvas id="aura"></canvas>
+<header><div class="brand">jos<span class="d">.</span>mx <small>the .jos standard</small></div>
+<nav><a href="#why">Why</a><a href="#flow">Create</a><a href="#registry">Registry</a><a href="#playground">Playground</a></nav></header>
+<main>
+  <div class="hero">
+    <span class="kicker">DETERMINISTIC AI ENGINEERING STANDARD · built by FOXTANA 🦊</span>
+    <h1>.jos</h1>
+    <p class="tag">Compiled, signed, <b>immutable</b> AI execution contracts.</p>
+    <p class="sub">The industry optimizes models. JOS optimizes <b>execution</b>. You don't buy tokens — you buy <b>determinism</b>: predictable, reproducible, auditable behavior that outlives any model or vendor.</p>
+    <div class="cta"><a class="btn" href="#playground">Validate a .jos</a><a class="btn ghost" href="#flow">How it's made</a></div>
+  </div>
+
+  <section id="why">
+    <h2>Models are commodities. Determinism isn't.</h2>
+    <p class="lead">Tokens, LLMs, speech providers, vector DBs — all interchangeable. The runtime owns the intelligence; providers just execute.</p>
+    <div class="commod">
+      <div><h3>Today</h3><p class="x">Optimize models · monetize compute · buy API calls · re-write prompts · lose knowledge when people leave · lock in to a vendor.</p></div>
+      <div><h3>With .jos</h3><p class="y">Optimize execution · monetize determinism · buy reproducible outcomes · compose signed artifacts · knowledge compounds · every provider replaceable.</p></div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <h2>From intention to a sealed artifact</h2>
+    <p class="lead">Nothing is frozen immediately. A .jos is compiled only once success criteria are met — then it's immutable, and superseded rather than edited.</p>
+    <div class="flow">
+      <span>Prompt</span><span class="arw">→</span><span>pre-jos.md</span><span class="arw">→</span><span>iterate</span><span class="arw">→</span><span>approve</span><span class="arw">→</span><span>crystallize</span><span class="arw">→</span><span>validate</span><span class="arw">→</span><span class="seal">sign · sha-256</span><span class="arw">→</span><span>register</span><span class="arw">→</span><span>publish</span>
+    </div>
+  </section>
+
+  <section id="registry">
+    <h2>Live registry</h2>
+    <p class="lead">Every artifact below is a real, validated, SHA-256-signed .jos in this runtime's registry. The home of the standard, backed by the standard.</p>
+    <div class="stats">
+      <div class="stat"><b>2</b><span>signed artifacts</span></div>
+      <div class="stat"><b>4</b><span>registered tools</span></div>
+      <div class="stat"><b>v0.0.9</b><span>spec</span></div>
+    </div>
+    <div class="reg">
+    <div class="rc">
+      <div class="rc-h">hello-world<span class="rc-k">agent</span></div>
+      <div class="rc-id">JOS-ID <b>0e6581382b9c</b></div>
+      <div class="rc-sha">sha256 0e6581382b9c79c8065add6683b10ac2…</div>
+      <div class="rc-t">2026-07-12</div>
+    </div>
+    <div class="rc">
+      <div class="rc-h">FOXTANA .jos Smith<span class="rc-k">agent</span></div>
+      <div class="rc-id">JOS-ID <b>c4eaf4f9bb64</b></div>
+      <div class="rc-sha">sha256 c4eaf4f9bb64f09ea2167af5d828970f…</div>
+      <div class="rc-t">2026-07-12</div>
+    </div></div>
+  </section>
+
+  <section id="playground">
+    <h2>Live .jos playground</h2>
+    <p class="lead">Paste a .jos — validated in your browser against the standard, with a canonical SHA-256 (JOS-ID = hash[0:12]).</p>
+    <div class="pg">
+      <div class="pg-h">🟢 .jos validator · client-side</div>
+      <div class="pg-b"><textarea id="src" spellcheck="false"></textarea><div class="res" id="out"></div></div>
+      <div class="pg-f"><button class="btn" id="go">Validate</button><button class="btn ghost" id="samp">Sample</button><span class="integ" id="integ"></span></div>
+    </div>
+  </section>
+</main>
+<footer>jos.mx — home of the .jos open standard · buy determinism, not tokens · built entirely by FOXTANA · JOSFOX LLC</footer>
+<script>
+(function(){var c=document.getElementById('aura'),x=c.getContext('2d'),w,h,t=0,st=[];for(var i=0;i<80;i++)st.push({x:Math.random(),y:Math.random(),r:Math.random()*1.4,p:Math.random()*6});
+ function rs(){w=c.width=innerWidth;h=c.height=innerHeight}rs();addEventListener('resize',rs);
+ (function d(){x.clearRect(0,0,w,h);for(var i=0;i<st.length;i++){var s=st[i];x.globalAlpha=.3+.35*Math.sin(t*.02+s.p);x.fillStyle='#cfd3ff';x.beginPath();x.arc(s.x*w,s.y*h,s.r,0,7);x.fill()}
+ var cx=w*.82,cy=h*.2,R=80;x.globalAlpha=1;var g=x.createRadialGradient(cx,cy,10,cx,cy,R*2.4);g.addColorStop(0,'rgba(124,77,255,.18)');g.addColorStop(1,'rgba(124,77,255,0)');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R*2.4,0,7);x.fill();
+ x.fillStyle='#e9e6ff';x.beginPath();x.arc(cx,cy,R,0,7);x.fill();x.globalCompositeOperation='destination-out';x.beginPath();x.arc(cx+R*.42,cy-R*.22,R*.92,0,7);x.fill();x.globalCompositeOperation='source-over';t++;requestAnimationFrame(d)})()})();
+var SAMPLE={jos:{version:'0.0.9',kind:'agent',open:'run',supports:['claude']},meta:{name:'Hello World',version:'1.0.0',type:'agent'},intention:{objective:'Greet the operator',success_criteria:['returns a friendly greeting']},guardrails:{budget:{max_tokens:200}}};
+var REQ={jos:['version','open','supports'],meta:['name','version','type'],intention:['objective','success_criteria']};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+async function sha(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+async function go(){var out=document.getElementById('out'),raw=document.getElementById('src').value.trim();if(!raw){out.innerHTML='<span class="dim">Paste a .jos.</span>';return}
+ var o;try{o=JSON.parse(raw)}catch(e){out.innerHTML='<span class="verdict fail">INVALID JSON</span><div class="chk">'+esc(e.message)+'</div>';return}
+ var errs=[],rows='';Object.keys(REQ).forEach(function(b){if(!o[b]){errs.push('missing '+b);rows+='<div class="chk">✕ block <b>'+b+'</b> missing</div>';return}rows+='<div class="chk">✓ '+b+'</div>';REQ[b].forEach(function(f){if(o[b][f]===undefined){errs.push('missing '+b+'.'+f);rows+='<div class="chk">&nbsp;&nbsp;✕ '+b+'.'+f+'</div>'}})});
+ if(!o.guardrails){errs.push('missing guardrails');rows+='<div class="chk">✕ block <b>guardrails</b> missing</div>'}else rows+='<div class="chk">✓ guardrails</div>';
+ var v=errs.length?'<span class="verdict fail">✕ INVALID</span>':'<span class="verdict pass">✓ VALID — spec-compliant</span>';
+ out.innerHTML=v+rows;
+ var h=JSON.parse(JSON.stringify(o));if(h.jos)delete h.jos.id;var canon=JSON.stringify(h,Object.keys(h).sort());var hash=await sha(canon);
+ document.getElementById('integ').textContent='JOS-ID '+hash.slice(0,12)+' · sha256 '+hash.slice(0,24)+'…'}
+document.getElementById('go').onclick=go;document.getElementById('samp').onclick=function(){document.getElementById('src').value=JSON.stringify(SAMPLE,null,2);go()};document.getElementById('samp').click();
+</script></body></html>
