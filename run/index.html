@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>.jos — open a document</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Open a .jos document with the jos on your machine, on josfox.cloud, or from a terminal. A link never executes anything; a host validates the document, checks its hash and asks you first.">
+<style>
+:root{--bg:#ffffff;--fg:#1a1a1a;--mut:#5c6370;--line:#e4e6ea;--card:#f7f8fa;--acc:#e8591c;--ok:#1d7a46;--bad:#b3261e;--code:#f2f3f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0f12;--fg:#e8e9ec;--mut:#9aa1ad;--line:#23262d;--card:#15171c;--acc:#ff7a3d;--ok:#4cc37a;--bad:#f08a80;--code:#1b1e25}}
+:root[data-theme="dark"]{--bg:#0e0f12;--fg:#e8e9ec;--mut:#9aa1ad;--line:#23262d;--card:#15171c;--acc:#ff7a3d;--ok:#4cc37a;--bad:#f08a80;--code:#1b1e25}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:16px}
+header{border-bottom:1px solid var(--line)}nav{display:flex;align-items:center;min-height:56px;font-size:14px;gap:18px}nav .brand{font-weight:700;color:var(--fg);margin-right:auto;font-size:16px}nav a{color:var(--mut)}
+h1{font-size:26px;margin:28px 0 8px}h2{font-size:17px;margin:22px 0 8px}p{margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:13.5px;line-height:1.5;margin:8px 0;max-width:100%;white-space:pre-wrap;word-break:break-all}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.93em;word-break:break-all}
+a.btn,button{display:inline-block;background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font:600 14px system-ui,sans-serif;cursor:pointer;text-decoration:none}
+a.btn.alt,button.alt{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.k{color:var(--mut);font-size:13px}.id{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all;font-size:13px}
+.status{display:inline-block;font-weight:700;padding:3px 10px;border-radius:999px;margin:4px 0}.pass{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.fail{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.small{font-size:13.5px;color:var(--mut)}.hidden{display:none}
+footer{border-top:1px solid var(--line);margin-top:32px;padding:20px 0 40px;color:var(--mut);font-size:14px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav><a class="brand" href="/">.jos</a><a href="/#validate">Validate</a><a href="https://github.com/josfox-jos/jos">GitHub</a></nav></div></header>
+<main class="wrap">
+<h1>Open a .jos document</h1>
+<p class="small">A link to a <code>.jos</code> is a proposal, not a command. The host you open it with fetches the document, checks that it hashes to the <code>art_</code> in the link, shows you what it is and what it may do, and runs nothing until you approve. This page is the no-account carrier: it reads the link from the part of the address after <code>#</code>, which browsers never send to any server, and it has no approve button of its own.</p>
+
+<div class="card" id="doc">
+<div id="verdict"></div>
+<div class="k">Document (art_)</div><div class="id" id="art">—</div>
+<div class="k" style="margin-top:8px">Source</div><div class="id" id="src">—</div>
+<div class="k" style="margin-top:8px">Input</div><pre id="input">—</pre>
+<div class="k" style="margin-top:8px">Tenant</div><div class="id" id="org">—</div>
+</div>
+
+<div id="offers">
+<h2>Open with</h2>
+<div class="card">
+<div class="row"><a class="btn" id="scheme" href="#">jos on this machine</a><a class="btn alt" id="cloud" href="#">josfox.cloud (account)</a></div>
+<p class="small">The first button calls <code id="joslink"></code>. If a handler is registered (<code>jos protocol register</code>), your <code>jos</code> opens the proposal and waits for you; if nothing happens, none is installed: use the terminal below. The second button opens the same link on josfox.cloud, where a signed-in session can supply vault names, a hub and a tenant.</p>
+</div>
+
+<h2>Or from a terminal</h2>
+<div class="card">
+<div class="k">1. Get the document into a fresh folder</div><pre id="get"></pre>
+<div class="k">2. Verify it is the document the link promised, and only then run it (validated and admitted by the kernel; secrets come from your vault, never from a link)</div><pre id="cmd"></pre>
+<div class="row"><button class="alt" id="copy">Copy the command</button><span class="small">No <code>jos</code> yet? <code>npm install -g @josfox/jos</code></span></div>
+</div>
+</div>
+<p class="small" id="refusednote" class="hidden"></p>
+
+<p class="small">Grammar (profiles/link-hosts/1): <code>jos+open://art_&lt;sha256&gt;[/run]?src=&lt;https url | git+https://host/owner/repo#ref:path&gt;[&amp;input=&lt;json&gt;][&amp;org=org_…]</code>. The same body after <code>https://josfox.cloud/j/</code> is the account carrier; after <code>https://jos.mx/run/#</code> it is this page.</p>
+</main>
+<footer><div class="wrap"><a href="/">jos.mx</a> · <a href="https://github.com/josfox-jos/jos-spec">specification</a> · <a href="https://github.com/josfox-jos/jos">josfox-jos/jos</a></div></footer>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};var esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')};var shq=function(s){return "'"+String(s).replace(/'/g,"'\\''")+"'"};
+var bytes=function(s){return new TextEncoder().encode(s).length};var BODYCHARS=/^[A-Za-z0-9._~%:/?#\[\]@!$&'()*+,;=-]*$/;var CRED=/(^|[^A-Za-z0-9])jos_[skrm]_[A-Za-z0-9_-]{8,}/i;var GITREF_BAD=/[ \t\n\r\f\v~^:?*\[\\]|@\{|\.\.|\/\/|\.lock$|^-|^\/|\/$|\.$|(^|\/)\.|^@$/;var depth=function(v,d){d=d||0;if(d>32)return d;if(Array.isArray(v))return Math.max.apply(null,[d].concat(v.map(function(x){return depth(x,d+1)})));if(v&&typeof v==='object')return Math.max.apply(null,[d].concat(Object.keys(v).map(function(k){return depth(v[k],d+1)})));return d};var walkCred=function(v){if(typeof v==='string')return CRED.test(v);if(Array.isArray(v))return v.some(walkCred);if(v&&typeof v==='object')return Object.keys(v).some(function(k){return CRED.test(k)||walkCred(v[k])});return false};var lone=/[\ud800-\udbff](?![\udc00-\udfff])|(^|[^\ud800-\udbff])[\udc00-\udfff]/;var hasLone=function(v){if(typeof v==='string')return lone.test(v);if(Array.isArray(v))return v.some(hasLone);if(v&&typeof v==='object')return Object.keys(v).some(function(k){return lone.test(k)||hasLone(v[k])});return false};var canon=function(v){if(Array.isArray(v))return '['+v.map(canon).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(function(k){return JSON.stringify(k)+':'+canon(v[k])}).join(',')+'}';return JSON.stringify(v)};var numsOk=function(v){if(typeof v==='number')return Number.isSafeInteger(v);if(Array.isArray(v))return v.every(numsOk);if(v&&typeof v==='object')return Object.keys(v).every(function(k){return numsOk(v[k])});return true};var LDH=/^(?=.{1,253}$)[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/;var NAME=/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
+var segs=function(p){return p&&p.split('/').every(function(s){var d=s;try{d=decodeURIComponent(s)}catch(e){}return s&&d!=='.'&&d!=='..'&&s.indexOf('\\')<0})};var hasRef=function(v){if(typeof v==='string')return /^jos:\/\//i.test(v);if(Array.isArray(v))return v.some(hasRef);if(v&&typeof v==='object')return Object.keys(v).some(function(k){return hasRef(v[k])});return false};
+function render(){
+ var body=location.hash.replace(/^#/,''),bad=[];
+ if(bytes('https://jos.mx/run/#'+body)>4096)bad.push('link longer than 4096 bytes');
+ var decodedAll='';try{decodedAll=decodeURIComponent(body)}catch(e){decodedAll=body}
+ if(CRED.test(body)||CRED.test(decodedAll))bad.push('a session, key, refresh or magic token never travels in a link');
+ if(!BODYCHARS.test(body)||/%(?![0-9A-Fa-f]{2})/.test(body))bad.push('the body has characters outside RFC 3986 or a malformed percent-escape');
+ var m=/^([^/?#]*)(\/[^?#]*)?(?:\?([^#]*))?(#.*)?$/.exec(body)||[];
+ var art=m[1]||'',verb=m[2]?m[2].slice(1):'run',query=m[3]||'';
+ if(m[4]!==undefined)bad.push('a fragment inside the body is not allowed');
+ if(!/^art_[0-9a-f]{64}$/.test(art))bad.push('no hash: the link does not start with art_<sha256>, a host must refuse it');
+ var reserved=['persona','install'].indexOf(verb)>=0;if(verb!=='run'&&!reserved)bad.push('unknown verb "'+esc(verb)+'"');
+ var seen={};(query?query.split('&'):[]).forEach(function(pair){var i=pair.indexOf('='),k=i<0?pair:pair.slice(0,i),v=i<0?'':pair.slice(i+1);
+  if(['src','input','org','i'].indexOf(k)<0)bad.push('unknown parameter "'+esc(k)+'"');else if(k in seen)bad.push('parameter "'+k+'" repeated');else if(!v)bad.push('parameter "'+k+'" is empty');else if(k==='org'||k==='i'){seen[k]=v}else{try{seen[k]=decodeURIComponent(v)}catch(e){bad.push('parameter "'+k+'" is not percent-encoded')}}});
+ var src=seen.src||'',input=seen.input||'',org=seen.org||'',inv=seen.i||'';var srcObj=null;
+ if(!src)bad.push('src is required');else if(src.indexOf('%')>=0)bad.push('src must be percent-encoded exactly once');else if(/[\x00-\x1f\x7f\\]/.test(src))bad.push('src has control characters or a backslash');
+ else if(/^https:\/\//.test(src)){var rest=src.slice(8),sl=rest.indexOf('/'),host=sl<0?rest:rest.slice(0,sl),path=sl<0?'':rest.slice(sl+1);
+  if(!LDH.test(host)||host.indexOf('@')>=0)bad.push('https src host must be a plain lowercase hostname, no userinfo, no port');
+  if(/[?#]/.test(path))bad.push('https src must not carry a query or a fragment');
+  if(!segs(path)||!/\.jos(\.json)?$/.test(path))bad.push('https src path must name a .jos file with no . or .. segments');
+  srcObj={kind:'https',url:src,file:path.split('/').pop()}}
+ else if(/^git\+https:\/\//.test(src)){var g=/^git\+https:\/\/([^/]+)\/([^/]+)\/([^#]+)#([^:]+):(.+)$/.exec(src);
+  if(!g)bad.push('git+https src must be git+https://host/owner/repo#ref:path');
+  else{var repo=g[3].replace(/\.git$/,'');if(!LDH.test(g[1])||!NAME.test(g[2])||!NAME.test(repo)||g[2]==='.'||g[2]==='..'||repo==='.'||repo==='..')bad.push('git+https host, owner and repo must be plain names');
+   if(GITREF_BAD.test(g[4])||bytes(g[4])>255||bytes(g[5])>1024||!segs(g[5])||g[5].charAt(0)==='-'||!/\.jos(\.json)?$/.test(g[5]))bad.push('git+https ref and path must have no . or .. segments and name a .jos file');
+   srcObj={kind:'git',host:g[1],owner:g[2],repo:repo,ref:g[4],path:g[5],url:src}}}
+ else bad.push('src must be https:// or git+https://');
+ if(org&&!/^org_[0-9A-HJKMNP-TV-Z]{26}$/.test(org))bad.push('org must be an org_ id');
+ if(inv&&!/^jos_i_[A-Za-z0-9_-]{8,128}$/.test(inv))bad.push('i must be a jos_i_ invitation id');
+ var inputObj=null;if(input){if(bytes(input)>2048)bad.push('input longer than 2048 bytes');
+  try{inputObj=JSON.parse(input);if(!inputObj||typeof inputObj!=='object'||Array.isArray(inputObj))throw 0;if(depth(inputObj)>32)bad.push('input nested deeper than 32');if(hasRef(inputObj))bad.push('input carries a PAL reference, which is not a value');if(!numsOk(inputObj))bad.push('input numbers must be integers within ±(2^53-1); write other numbers as strings');if(walkCred(inputObj))bad.push('a session, key, refresh or magic token never travels in a link');if(hasLone(inputObj))bad.push('input has a lone surrogate');if(canon(inputObj)!==input)bad.push('input must be canonical JSON: sorted keys, no whitespace')}catch(e){bad.push('input is not a JSON object')}}
+ var refused=bad.length>0;
+ $('verdict').innerHTML=refused?'<span class="status fail">refused</span><div class="small">'+bad.join('<br>')+'</div>':(reserved?'<span class="status pass">link well-formed</span><div class="small">verb "'+esc(verb)+'" is reserved for a later phase: no host offers it yet</div>':'<span class="status pass">link well-formed</span>');
+ $('art').textContent=refused?'—':art;$('src').textContent=refused?'—':src;$('input').textContent=refused?'—':(inputObj?JSON.stringify(inputObj,null,2):'(none)');$('org').textContent=refused?'—':(org?'scoped (evaluated by the cloud)':'(none)');
+ $('offers').className=(refused||reserved)?'hidden':'';$('refusednote').className=(refused||reserved)?'small':'hidden';$('refusednote').textContent=refused?'A refused link is not offered to any host and no command is shown for it.':(reserved?'A reserved verb is not offered to any host in this phase.':'');
+ if(refused||reserved)return;
+ var get,file;if(srcObj.kind==='git'){file=srcObj.path;get='cd "$(mktemp -d)" && git clone '+shq('https://'+srcObj.host+'/'+srcObj.owner+'/'+srcObj.repo+'.git')+' repo && cd repo && git checkout --detach '+shq(srcObj.ref)}
+ else{file='document.jos';get='cd "$(mktemp -d)" && curl -fsSL --proto =https --max-filesize 1048576 -o document.jos '+shq(srcObj.url)}
+ var cmd='jos ids '+shq('./'+file)+' --json | grep -qE '+shq('"artifact": *"'+art+'"')+' && jos run '+shq('./'+file)+(inputObj?' --input '+shq(JSON.stringify(inputObj)):'')+'   # runs only if the kernel computes exactly this art_ for the file';
+ $('get').textContent=get;$('cmd').textContent=cmd;
+ var joslink='jos+open://'+body,cloud='https://josfox.cloud/j/'+body;$('joslink').textContent=joslink.replace(/org=org_[0-9A-HJKMNP-TV-Z]{26}/,'org=org_…').replace(/&i=jos_i_[A-Za-z0-9_-]+/,'&i=jos_i_…');$('scheme').href=joslink;$('cloud').href=cloud;
+ $('copy').textContent='Copy the command';$('copy').onclick=function(){navigator.clipboard&&navigator.clipboard.writeText(get+'\n'+cmd).then(function(){$('copy').textContent='Copied'})};}
+render();window.addEventListener('hashchange',render);
+})();
+</script>
+</body>
+</html>

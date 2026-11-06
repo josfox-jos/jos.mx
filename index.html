@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>.jos — JOS Open Standards</title>
+<meta name="description" content=".jos is a JSON format for declaring an intention: what is intended, when it is done, and what is to be avoided. Validate a document, see its content id, and find the tools and the specification.">
+<link rel="canonical" href="https://jos.mx/">
+<meta property="og:title" content=".jos — JOS Open Standards">
+<meta property="og:description" content="The intention is the atom of AI. An open format, two reference kernels, a conformance kit.">
+<meta property="og:url" content="https://jos.mx/">
+<style>
+:root{--bg:#ffffff;--fg:#1a1a1a;--mut:#5c6370;--line:#e4e6ea;--card:#f7f8fa;--acc:#e8591c;--ok:#1d7a46;--bad:#b3261e;--code:#f2f3f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e0f12;--fg:#e8e9ec;--mut:#9aa1ad;--line:#23262d;--card:#15171c;--acc:#ff7a3d;--ok:#4cc37a;--bad:#f08a80;--code:#1b1e25}}
+:root[data-theme="dark"]{--bg:#0e0f12;--fg:#e8e9ec;--mut:#9aa1ad;--line:#23262d;--card:#15171c;--acc:#ff7a3d;--ok:#4cc37a;--bad:#f08a80;--code:#1b1e25}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+header{border-bottom:1px solid var(--line)}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:center;min-height:56px;font-size:14px}
+nav .brand{font-weight:700;color:var(--fg);margin-right:auto;font-size:16px}
+nav a{color:var(--mut)}nav a:hover{color:var(--fg)}
+.hero{padding:56px 0 32px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;margin:0 0 12px;letter-spacing:-.01em}
+.lead{font-size:18px;color:var(--mut);max-width:760px;margin:0 0 20px}
+.def{border-left:3px solid var(--acc);padding:4px 14px;color:var(--fg);max-width:760px;margin:0 0 24px}
+section{padding:36px 0;border-top:1px solid var(--line)}
+h2{font-size:22px;margin:0 0 14px}h3{font-size:17px;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:760px}
+pre{max-width:100%;background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:13.5px;line-height:1.5;margin:0 0 14px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.93em}
+p code,li code,td code{background:var(--code);padding:1px 5px;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;margin:0 0 14px}
+.tbl{overflow-x:auto;margin:0 0 14px}.tbl table{margin:0;min-width:560px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.card h3{margin:0 0 6px;font-size:16px}.card p{margin:0;color:var(--mut);font-size:14.5px}
+textarea{width:100%;min-height:220px;background:var(--code);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:12px;font:13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font:600 14px system-ui,sans-serif;cursor:pointer}
+button.alt{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+#out{margin-top:12px;font-size:14.5px}
+.verdict{display:inline-block;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.pass{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.fail{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.chk{color:var(--mut);margin:2px 0}.chk b{color:var(--fg)}
+.id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;word-break:break-all;background:var(--code);padding:8px 10px;border-radius:6px;margin-top:8px;font-size:13px}
+.note{color:var(--mut);font-size:14px}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--mut);font-size:14px}
+footer p{max-width:none}
+.small{font-size:13.5px;color:var(--mut)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+<a class="brand" href="/">.jos</a>
+<a href="#start">Start</a><a href="#example">Example</a><a href="#validate">Validate</a><a href="#tools">Tools</a><a href="#releases">Releases</a>
+<a href="https://github.com/josfox-jos/jos-spec">Specification</a><a href="https://github.com/josfox-jos/jos">GitHub</a>
+</nav></div></header>
+
+<main class="wrap">
+<div class="hero">
+<h1>The intention is the atom of AI.</h1>
+<p class="lead"><strong>.jos</strong> is an open format, two reference kernels and a conformance kit for AI work you can save, verify and run again on any agent, any platform, any machine.</p>
+<p class="def">A <code>.jos</code> document is JSON that declares an intention: <em>what</em> is intended, <em>when</em> it is done (success criteria) and <em>what to avoid</em> (guardrails and limits). A kernel checks it before it runs, verifies it after, and leaves a receipt per step and a hash-chained ledger per run. Media type <code>application/vnd.jos+json</code>.</p>
+<div class="row"><a href="#start"><button>Start in one minute</button></a><a href="https://github.com/josfox-jos/jos-spec"><button class="alt">Read the specification</button></a></div>
+</div>
+
+<section id="start">
+<h2>Start in one minute</h2>
+<pre><code>npx @josfox/jos verify      # runs the embedded hello.jos through the kernel: SYSTEM HEALTHY
+npm install -g @josfox/jos
+jos init hello              # writes hello.jos, a 2.0 atom validated by the kernel
+jos run hello.jos           # the verdict of each criterion, the run id, a metrics line
+jos ledger verify &lt;run_&gt;    # every hash recomputed, chain continuous, run ended</code></pre>
+<p class="small">Python: <code>pip install jos-core</code> gives the same kernel, the same ids and the same ledger bytes. Exit codes everywhere: 0 done · 1 not done · 2 invalid · 3 blocked · 5 valid but unexecutable · 124 time limit.</p>
+</section>
+
+<section id="example">
+<h2>What a .jos looks like</h2>
+<p>An atom with a budget, sealed by its hash. Its content id, <code>art_41deb162…</code>, is the SHA-256 of the canonical document; change one byte and the kernel refuses to run it (code 3).</p>
+<pre><code id="sample">{
+  "jos": { "version": "2.0.0", "kind": "atom" },
+  "id": "hello",
+  "meta": { "name": "hello", "version": "1.0.0" },
+  "intention": {
+    "objective": "Say hello and prove it",
+    "success_criteria": [ { "exit": 0 }, { "stdout_contains": "hello:ok" } ]
+  },
+  "guardrails": {
+    "avoid": ["network", "writing files"],
+    "limit": { "seconds": 10, "output_bytes": 65536, "tokens": 1000, "cost_usd": 0.01, "retries": 0 }
+  },
+  "security": { "permissions": ["engine:shell", "net:none"] },
+  "execution": { "engine": "shell", "run": ["sh", "-c", "echo hello:ok"] },
+  "integrity": { "hash": "sha256:41deb162c4a96d87acbdb10dc41f756b6bf2d1872f21024e443697739210db00" }
+}</code></pre>
+<div class="grid">
+<div class="card"><h3>Atoms</h3><p>One intention, one verifiable result: objective, criteria, limits, permissions, what to avoid.</p></div>
+<div class="card"><h3>Flows</h3><p>Intentions composed with <code>needs</code>, <code>with</code> and <code>as</code>. A step can run as a shadow clone with its own budget and ledger.</p></div>
+<div class="card"><h3>Directories</h3><p>A folder with <code>.jos/manifest.jos</code> is a document too. Limits only tighten and permissions only narrow from parent to child.</p></div>
+<div class="card"><h3>Receipts and ledgers</h3><p>Every step leaves a receipt with each criterion's verdict and the hashes of input and output; every run an append-only, hash-chained ledger anyone can verify.</p></div>
+</div>
+</section>
+
+<section id="validate">
+<h2>Validate a .jos in your browser</h2>
+<p>Structural checks of the 2.0 document model (header, metadata, intention, limits) and the content identity computed the way the kernels compute it: SHA-256 over the canonical JSON with <code>integrity.hash</code> and <code>integrity.signature</code> emptied. Nothing leaves your browser and nothing is executed.</p>
+<textarea id="src" spellcheck="false" aria-label="A .jos document"></textarea>
+<div class="row"><button id="go">Validate</button><button class="alt" id="samp">Load the example</button><span class="note">Full validation against the JSON Schema and the conformance kit: <code>jos validate &lt;file&gt; --strict</code>.</span></div>
+<div id="out"></div>
+</section>
+
+<section id="tools">
+<h2>The tools</h2>
+<div class="tbl"><table>
+<tr><th>Tool</th><th>What it is</th><th>Get it</th></tr>
+<tr><td><a href="https://www.npmjs.com/package/@josfox/jos-core">@josfox/jos-core</a></td><td>Reference kernel in JavaScript: validates and runs .jos, a receipt per step and a ledger per run. Zero dependencies, no network.</td><td><code>npm install @josfox/jos-core</code></td></tr>
+<tr><td><a href="https://pypi.org/project/jos-core/">jos-core</a> (Python)</td><td>The same kernel in Python, same ids and ledgers.</td><td><code>pip install jos-core</code></td></tr>
+<tr><td><a href="https://www.npmjs.com/package/@josfox/jos">@josfox/jos</a></td><td>The <code>jos</code> command line: documents, runs, ledger, meter, projects, agents, services, secrets, <code>jos serve</code> (HTTP, MCP, A2A).</td><td><code>npm install -g @josfox/jos</code></td></tr>
+<tr><td><a href="https://www.npmjs.com/package/@josfox/jos-cli">@josfox/jos-cli</a></td><td>Client of .jos hubs: pair a device, send and read tasks over A2A, bridge to MCP.</td><td><code>npm install -g @josfox/jos-cli</code></td></tr>
+<tr><td><a href="https://www.npmjs.com/package/josctl">josctl</a> · <a href="https://www.npmjs.com/package/josfox">josfox</a> · <a href="https://www.npmjs.com/package/foxctl">foxctl</a></td><td>Controller, starting point, services CLI.</td><td><code>npm install -g josctl josfox foxctl</code></td></tr>
+<tr><td><a href="https://marketplace.visualstudio.com/items?itemName=JOSFOX.josfox-jos">VS Code extension</a></td><td>.jos for VS Code, Cursor, Windsurf and Antigravity: schema validation and the jos console.</td><td>Visual Studio Marketplace</td></tr>
+</table></div>
+<p class="small">Native to the agent protocols: <code>jos serve --mcp</code> is an MCP server; <code>jos serve --http</code> publishes an A2A agent card at <code>/.well-known/agent.json</code> and accepts tasks whose payload is a .jos.</p>
+</section>
+
+<section id="releases">
+<h2>Releases</h2>
+<p class="small">This table is <a href="releases.json"><code>releases.json</code></a>, the public record of what is published. It is updated on every release.</p>
+<div class="tbl"><table id="rel"><tr><th>Package</th><th>Version</th><th>Date</th><th>Where</th></tr></table></div>
+</section>
+
+<section id="spec">
+<h2>The specification</h2>
+<p>The format, its JSON Schemas, conformance vectors and companions (JOSID, Ledger, Capability, Context engine) live in <a href="https://github.com/josfox-jos/jos-spec">josfox-jos/jos-spec</a>, the specification of the media type <code>application/vnd.jos+json</code>. Version 2.0.0 is an additive superset of 1.0.0. The conformance kit has 279 document vectors; the JavaScript and Python kernels pass all of them with identical results.</p>
+<p>The earlier 0.0.7 draft is kept for history at <a href="https://github.com/josfox-ai/jos-format-spec">josfox-ai/jos-format-spec</a>; a 2.0 kernel still reads 0.0.7 documents.</p>
+<p>Everything else, including what ships today and what does not yet, is in the main repository: <a href="https://github.com/josfox-jos/jos">josfox-jos/jos</a>. Agents start at its <code>llms.txt</code>.</p>
+</section>
+</main>
+
+<footer><div class="wrap">
+<p><a href="https://github.com/josfox-jos/jos">josfox-jos/jos</a> · <a href="https://github.com/josfox-jos/jos-spec">jos-spec</a> · <a href="https://www.npmjs.com/~josfox">npm</a> · <a href="https://pypi.org/project/jos-core/">PyPI</a> · <a href="https://marketplace.visualstudio.com/items?itemName=JOSFOX.josfox-jos">VS Code</a></p>
+<p>Code under Apache-2.0, specification text under CC BY 4.0. Sponsored by <a href="https://josfox.ai">JOSFOX</a> and JOSFOX.AI.</p>
+</div></footer>
+
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var SAMPLE=$('sample').textContent;
+function canon(v){if(Array.isArray(v))return '['+v.map(canon).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(function(k){return JSON.stringify(k)+':'+canon(v[k])}).join(',')+'}';return JSON.stringify(v)}
+async function sha(s){var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+var isObj=function(v){return v&&typeof v==='object'&&!Array.isArray(v)};
+function check(o){var e=[],ok=[];
+ if(!isObj(o))return{errs:['the top-level value must be an object'],oks:[]};
+ if(!isObj(o.jos))e.push('missing <b>jos</b> header');else{
+  if(typeof o.jos.version!=='string'||!/^\d+\.\d+\.\d+$/.test(o.jos.version))e.push('<b>jos.version</b> must be MAJOR.MINOR.PATCH');else ok.push('jos.version '+esc(o.jos.version));
+  if(o.jos.kind!==undefined&&['atom','flow','service','persona','template','crystal','directory','engine'].indexOf(o.jos.kind)<0)e.push('<b>jos.kind</b> is not a registered kind');else ok.push('jos.kind '+esc(o.jos.kind||'(inferred)'))}
+ if(!isObj(o.meta)||typeof o.meta.name!=='string'||!o.meta.name)e.push('missing <b>meta.name</b>');else ok.push('meta.name '+esc(o.meta.name));
+ if(o.intention!==undefined){if(!isObj(o.intention))e.push('<b>intention</b> must be an object');else{ok.push('intention.objective '+(o.intention.objective?'present':'absent'));var c=o.intention.success_criteria;if(c===undefined)ok.push('no success_criteria: a wish, not a verifiable intention');else if(!Array.isArray(c))e.push('<b>success_criteria</b> must be an array');else ok.push(c.length+' success criteria')}}else ok.push('no intention (allowed, nothing to verify)');
+ if(o.guardrails!==undefined){if(!isObj(o.guardrails))e.push('<b>guardrails</b> must be an object');else{var l=o.guardrails.limit;if(l!==undefined){if(!isObj(l))e.push('<b>guardrails.limit</b> must be an object');else{['seconds','output_bytes','tokens','cost_usd','retries','context_tokens'].forEach(function(k){if(l[k]!==undefined&&(typeof l[k]!=='number'||l[k]<0||(k==='tokens'&&l[k]<1)))e.push('<b>limit.'+k+'</b> is out of range')});ok.push('limit: '+Object.keys(l).join(', '))}}if(o.guardrails.avoid!==undefined&&!Array.isArray(o.guardrails.avoid))e.push('<b>guardrails.avoid</b> must be an array')}}
+ if(o.security!==undefined&&o.security.permissions!==undefined&&!Array.isArray(o.security.permissions))e.push('<b>security.permissions</b> must be an array');
+ Object.keys(o).forEach(function(k){if(['jos','meta','id','intention','guardrails','execution','orchestration','model_policy','persona','tool_policy','security','capabilities','requires','lifecycle','reproducibility','integrity','crystal','ui','metrics','billing'].indexOf(k)<0&&k.indexOf('x-')!==0)e.push('unknown root member <b>'+esc(k)+'</b> (only x- members are extension data)')});
+ return{errs:e,oks:ok}}
+async function go(){var out=$('out'),raw=$('src').value.trim();if(!raw){out.innerHTML='<span class="note">Paste a .jos.</span>';return}
+ var o;try{o=JSON.parse(raw)}catch(err){out.innerHTML='<span class="verdict fail">INVALID JSON</span><div class="chk">'+esc(err.message)+'</div>';return}
+ var r=check(o),html=r.errs.length?'<span class="verdict fail">✕ not a valid 2.0 document</span>':'<span class="verdict pass">✓ structurally valid 2.0 document</span>';
+ r.errs.forEach(function(x){html+='<div class="chk">✕ '+x+'</div>'});r.oks.forEach(function(x){html+='<div class="chk">✓ '+x+'</div>'});
+ if(isObj(o)){var h=JSON.parse(JSON.stringify(o));var declared=isObj(h.integrity)&&typeof h.integrity.hash==='string'?h.integrity.hash:null;h.integrity=Object.assign({},isObj(h.integrity)?h.integrity:{},{hash:'',signature:''});var hex=await sha(canon(h));
+  html+='<div class="id">art_'+hex+'</div><div class="chk">integrity.hash sha256:'+hex+(declared?(declared==='sha256:'+hex?' — <b>matches the declared hash</b>':' — <b>does not match the declared hash</b> ('+esc(declared)+'): a kernel refuses to run it, code 3'):' — not declared; add it to seal the document')+'</div>'}
+ out.innerHTML=html}
+$('go').onclick=go;$('samp').onclick=function(){$('src').value=SAMPLE;go()};
+fetch('releases.json',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){var t=$('rel');(j.releases||[]).forEach(function(x){var tr=document.createElement('tr');tr.innerHTML='<td>'+esc(x.name)+'</td><td><code>'+esc(x.version)+'</code></td><td>'+esc(x.date||'')+'</td><td>'+(x.url?'<a href="'+esc(x.url)+'">'+esc(x.registry||'link')+'</a>':esc(x.registry||''))+'</td>';t.appendChild(tr)})}).catch(function(){var tr=document.createElement('tr');tr.innerHTML='<td colspan="4" class="note">releases.json could not be loaded.</td>';$('rel').appendChild(tr)});
+})();
+</script>
+</body>
+</html>

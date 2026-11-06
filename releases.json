@@ -1,0 +1,16 @@
+{
+  "$schema_note": "One entry per published package version. A release hook appends here; the page renders it. Fields: name, version, date (YYYY-MM-DD), registry (npm|pypi|vscode-marketplace|github), url, sha256 (optional, of the published artifact).",
+  "updated": "2026-11-05",
+  "releases": [
+    { "name": "@josfox/jos", "version": "6.0.1", "date": "2026-11-04", "registry": "npm", "url": "https://www.npmjs.com/package/@josfox/jos" },
+    { "name": "josctl", "version": "2.1.1", "date": "2026-11-04", "registry": "npm", "url": "https://www.npmjs.com/package/josctl" },
+    { "name": "josfox", "version": "2.1.1", "date": "2026-11-04", "registry": "npm", "url": "https://www.npmjs.com/package/josfox" },
+    { "name": "foxctl", "version": "2.1.1", "date": "2026-11-04", "registry": "npm", "url": "https://www.npmjs.com/package/foxctl" },
+    { "name": "@josfox/foxctl", "version": "2.1.1", "date": "2026-11-04", "registry": "npm", "url": "https://www.npmjs.com/package/@josfox/foxctl" },
+    { "name": "@josfox/jos-core", "version": "2.1.0", "date": "2026-10-30", "registry": "npm", "url": "https://www.npmjs.com/package/@josfox/jos-core" },
+    { "name": "jos-core", "version": "2.1.0", "date": "2026-10-30", "registry": "pypi", "url": "https://pypi.org/project/jos-core/" },
+    { "name": "@josfox/jos-cli", "version": "2.0.0", "date": "2026-10-30", "registry": "npm", "url": "https://www.npmjs.com/package/@josfox/jos-cli" },
+    { "name": "JOSFOX.josfox-jos (VS Code extension)", "version": "2.1.0", "date": "2026-10-30", "registry": "vscode-marketplace", "url": "https://marketplace.visualstudio.com/items?itemName=JOSFOX.josfox-jos" },
+    { "name": "jos-spec", "version": "2.0.0", "date": "2026-10-22", "registry": "github", "url": "https://github.com/josfox-jos/jos-spec" }
+  ]
+}

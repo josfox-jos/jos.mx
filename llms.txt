@@ -1,0 +1,14 @@
+# jos.mx
+
+> jos.mx is the home page of .jos, the open standard for AI agent contracts: one JSON document states what an agent must achieve, how success is checked, and what it must never do. Media type application/vnd.jos+json, specification 2.0.0, IANA registration pending (ticket #1460136).
+
+## Read next
+
+- [Start here](https://github.com/josfox-jos/jos): quick start and packages
+- [Specification](https://github.com/josfox-jos/jos-spec): normative text, schemas, conformance kit
+- [llms.txt of the specification](https://github.com/josfox-jos/jos-spec/blob/main/llms.txt)
+
+## Install
+
+- `npm install -g @josfox/jos`
+- `pip install jos-core`
